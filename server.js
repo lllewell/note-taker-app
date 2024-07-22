@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const notes = require('./Develop/db/db.json');
+const savedNotes = require('./Develop/db/db.json');
 const uuid = require('./Develop/helpers/uuid');
 const fs = require('fs');
 
@@ -17,14 +17,14 @@ app.get('/notes', (req, res) =>
     res.sendFile(path.join(__dirname, '/Develop/public/notes.html'))
 );
 
-app.get('*', (req, res) => 
+app.get('*', (req, res) =>
     res.sendFile(path.join(__dirname, '/Develop/public/index.html'))
 );
 
 app.get('/api/notes', (req, res) => {
     console.info(`${req.method} request received to get notes`);
 
-    return res.json(notes);    
+    return res.json(savedNotes);
 });
 
 app.post('/api/notes', (req, res) => {
@@ -36,7 +36,7 @@ app.post('/api/notes', (req, res) => {
         note_id: uuid(),
     };
 
-    const data = fs.readFileSync(notes);
+    const data = fs.readFileSync(savedNotes);
 
     const madeNotes = JSON.parse(data);
 
@@ -46,10 +46,17 @@ app.post('/api/notes', (req, res) => {
 
     fs.writeFileSync('./Develop/db/db.json', noteString, (err) => {
         err
-        ? console.error(err)
-        : console.log(`New note has been added to JSON file`);
-    })
+            ? console.error(err)
+            : console.log(`New note has been added to JSON file`);
+    });
+
+    const response = {
+        status: 'success',
+        body: newNote,
+    };
+
+    console.log(response);
 });
 app.listen(PORT, () =>
     console.log(`App listening at http://localhost:${PORT}`)
-  );
+);
