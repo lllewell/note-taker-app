@@ -13,20 +13,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
-app.get('/notes', (req, res) =>
-    res.sendFile(path.join(__dirname, '/Develop/public/notes.html'))
-);
-
-app.get('*', (req, res) =>
-    res.sendFile(path.join(__dirname, '/Develop/public/index.html'))
-);
-
-app.get('/api/notes', (req, res) => {
-    console.info(`${req.method} request received to get notes`);
-
-    return res.json(savedNotes);
-});
-
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a note`);
 
@@ -57,6 +43,15 @@ app.post('/api/notes', (req, res) => {
 
     console.log(response);
 });
+
+app.get('/notes', (req, res) =>
+    res.sendFile(path.join(__dirname, '/Develop/public/notes.html'))
+);
+
+app.get('*', (req, res) =>
+    res.sendFile(path.join(__dirname, '/Develop/public/index.html'))
+);
+
 app.listen(PORT, () =>
     console.log(`App listening at http://localhost:${PORT}`)
 );
