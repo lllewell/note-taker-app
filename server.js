@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const savedNotes = require('./db/db.json');
 const uuid = require('./helpers/uuid');
-const { readAndAppend } = require('./helpers/fsUtils');
+const { readAndAppend, readFromFile } = require('./helpers/fsUtils');
 const fs = require('fs');
 
 const app = express();
@@ -45,16 +45,13 @@ app.post('/api/notes', (req, res) => {
 
         const noteString = JSON.stringify(madeNotes, null, 2);
 
-        fs.writeFileSync('./db/db.json', noteString, (err) => {
-            err
-                ? console.error(err)
-                : console.log(`New note has been added to JSON file`);
-        });
-
-
         console.log(response);
     }
 });
+
+app.get('/api/notes', (req, res) => 
+    readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
+);
 
 app.get('/notes', (req, res) =>
     res.sendFile(path.join(__dirname, '/public/notes.html'))
