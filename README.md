@@ -19,3 +19,5 @@ The user will be presented with a landing page, upon clicking the button to "Get
 ## Links
 [render-deployment](https://note-taker-app-t1di.onrender.com)
 
+[github-repo](https://github.com/lllewell/note-taker-app)
+
